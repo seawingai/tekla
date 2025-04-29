@@ -2,10 +2,10 @@
 This project contains two `Tekla Structures 2025` macros:
 
 ## ExportToExcel
-Exports member information (ID, Name, Section, Start/End points, Comment) to an Excel file.
+Exports member information (ID, Name, Section, Start/End points, Comment) to an Excel file `Desktop\Model.xlsx`.
 
 ## ImportFromExcel
-Reads connections from an Excel file and creates connections between members in Tekla.
+Reads connections from an Excel file `Desktop\Model.xlsx` and creates connections between members in Tekla.
 
 ## Install Software
 
