@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ExcelMacros": {
+      "commandName": "Project",
+      "commandLineArgs": "export"
+    }
+  }
+}
