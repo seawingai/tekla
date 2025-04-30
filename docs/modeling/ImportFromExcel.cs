@@ -22,7 +22,7 @@ namespace UserMacros
 
             if (!File.Exists(exePath))
             {
-                System.Windows.Forms.MessageBox.Show($"Executable not found:\n{exePath}");
+                System.Windows.Forms.MessageBox.Show("Executable not found:\n" + exePath);
                 return;
             }
 
