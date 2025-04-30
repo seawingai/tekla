@@ -29,10 +29,10 @@ See the [Connections.xlsx](#Connectionsxlsx) section for details on the exported
 
 ### Model.xlsx
 
-| ID     | Name | Profile | StartX | StartY | StartZ | EndX | EndY | EndZ | Comment | Selected |
-| ------ | ---- | ------- | ------ | ------ | ------ | ---- | ---- | ---- | ------- | -------- |
-| GUID-1 | B1   | W200X42 | 0.0    | 0.0    | 0.0    | 4000 | 0.0  | 0.0  | Column  |          |
-| GUID-2 | B2   | W250X53 | 0.0    | 0.0    | 3000   | 4000 | 0.0  | 3000 | Beam    |          |
+| ID     | Name | Profile | StartX | StartY | StartZ | EndX | EndY | EndZ | Comment |
+| ------ | ---- | ------- | ------ | ------ | ------ | ---- | ---- | ---- | ------- |
+| GUID-1 | B1   | W200X42 | 0.0    | 0.0    | 0.0    | 4000 | 0.0  | 0.0  | Column  |
+| GUID-2 | B2   | W250X53 | 0.0    | 0.0    | 3000   | 4000 | 0.0  | 3000 | Beam    |
 
 ---
 

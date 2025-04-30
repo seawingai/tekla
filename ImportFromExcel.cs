@@ -81,7 +81,7 @@ namespace Tekla.ExcelMacros
                     else
                         connection.LoadAttributesFromFile("standard");
 
-                    if (connection.Insert() {
+                    if (connection.Insert()) {
                         Log($"Success: Inserted {connectionType} between {guid1} and {guid2}.");
                     }
                     else {
