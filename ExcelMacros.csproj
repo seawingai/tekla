@@ -5,6 +5,7 @@
 		<TargetFramework>net48</TargetFramework>
 		<StartupObject>Tekla.ExcelMacros.Program</StartupObject>
 		<BaseOutputPath>C:\TeklaStructuresModels\test2\macros\modeling\excel-macros</BaseOutputPath>
+		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
