@@ -8,6 +8,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Compile Remove="docs\modeling\excel-macros\Debug\net48\docs\modeling\ExportToExcel.cs" />
+		<Compile Remove="docs\modeling\excel-macros\Debug\net48\docs\modeling\ImportFromExcel.cs" />
 		<Compile Remove="docs\modeling\ExportToExcel.cs" />
 		<Compile Remove="docs\modeling\ImportFromExcel.cs" />
 	</ItemGroup>
@@ -34,10 +36,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="docs\modeling\excel-macros\" />
-	</ItemGroup>
-
-	<ItemGroup>
+		<None Include="docs\modeling\excel-macros\Debug\net48\docs\modeling\ExportToExcel.cs" />
+		<None Include="docs\modeling\excel-macros\Debug\net48\docs\modeling\ImportFromExcel.cs" />
 		<None Include="docs\modeling\ExportToExcel.cs">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
@@ -55,10 +55,7 @@
 		<ItemGroup>
 			<BuiltFiles Include="$(BaseOutputPath)\**\*.*" />
 		</ItemGroup>
-		<Copy
-		  SourceFiles="@(BuiltFiles)"
-		  DestinationFolder="C:\data\code\tekla\docs\modeling\excel-macros\%(RecursiveDir)"
-		  SkipUnchangedFiles="true" />
+		<Copy SourceFiles="@(BuiltFiles)" DestinationFolder="C:\data\code\tekla\docs\modeling\excel-macros\%(RecursiveDir)" SkipUnchangedFiles="true" />
 	</Target>
 
 </Project>
