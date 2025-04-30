@@ -34,17 +34,6 @@ See the [Connections.xlsx](#Connectionsxlsx) section for details on the exported
 | GUID-1 | B1   | W200X42 | 0.0    | 0.0    | 0.0    | 4000 | 0.0  | 0.0  | Column  |
 | GUID-2 | B2   | W250X53 | 0.0    | 0.0    | 3000   | 4000 | 0.0  | 3000 | Beam    |
 
----
-
-#### Column Descriptions
-
-- **MemberGUID**: Unique identifier of the Tekla part (used for connection mapping later).
-- **Name**: Part name (`.Name` property).
-- **Profile**: Cross-section or shape (e.g., W200X42).
-- **StartX, StartY, StartZ**: Start point coordinates of the part.
-- **EndX, EndY, EndZ**: End point coordinates of the part.
-- **Comment**: Any custom comment from a UDA (optional).
-- **Selected**: *(Initially blank)* – to be filled by the user in Excel later. If filled (e.g., "Yes"), the part is considered selected for connection creation in Macro 2.
 
 ### Connections.xlsx
 
@@ -55,3 +44,13 @@ See the [Connections.xlsx](#Connectionsxlsx) section for details on the exported
 | ...    | ...    | ...            | ...           |          |
 
 Only rows with a non-empty `Selected` field (e.g. `Yes`, `yes` or `X`) will be processed.  
+
+### Column Descriptions
+
+- **ID**: Unique identifier of the Tekla part (used for connection mapping later).
+- **Name**: Part name (`.Name` property).
+- **Profile**: Cross-section or shape (e.g., W200X42).
+- **StartX, StartY, StartZ**: Start point coordinates of the part.
+- **EndX, EndY, EndZ**: End point coordinates of the part.
+- **Comment**: Any custom comment from a UDA (optional).
+- **Selected**: *(Initially blank)* – to be filled by the user in Excel later. If filled (e.g., "Yes"), the part is considered selected for connection creation in Macro 2.
