@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.IO;
 using ClosedXML.Excel;
 using Tekla.Structures.Model;
@@ -8,6 +9,20 @@ namespace Tekla.ExcelMacros
     internal class ExportToExcel
     {
         public void Export()
+        {
+            try
+            {
+                Execute();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error occured.\n{ex.Message}\n{ex.StackTrace}");
+
+                Console.ReadKey();
+            }
+        }
+
+        private void Execute()
         {
             var model = new Model();
             if (!model.GetConnectionStatus())
@@ -32,9 +47,8 @@ namespace Tekla.ExcelMacros
             {
                 if (objects.Current is Beam beam)
                 {
-
                     string comment = "";
-                    beam.GetUserProperty("Comment", ref comment);
+                    beam.GetUserProperty("comment", ref comment);
 
                     worksheet.Cell(row, 1).Value = beam.Identifier.ID;
                     worksheet.Cell(row, 2).Value = beam.Name;
@@ -47,7 +61,7 @@ namespace Tekla.ExcelMacros
                     worksheet.Cell(row, 9).Value = beam.EndPoint.Z;
                     worksheet.Cell(row, 10).Value = comment;
 
-                    Console.WriteLine($"[{row}] - Beam added: {beam.Identifier.ID} - [{beam.Name}]");
+                    Console.WriteLine($"[{row}] - Beam added: {beam.Identifier.ID} - [{beam.Name}] - comment:[{comment}]");
 
                     row++;
                 }
@@ -55,6 +69,21 @@ namespace Tekla.ExcelMacros
 
             workbook.SaveAs(filePath);
             Console.WriteLine($"Excel saved: {filePath}");
+        }
+
+        private void GetUserPropertyNames(Beam beam)
+        {
+            Console.WriteLine($"UDA for beam: {beam.Name}");
+
+            var enumProps = new Hashtable();
+            beam.GetAllUserProperties(ref enumProps);
+
+            foreach (DictionaryEntry entry in enumProps)
+            {
+                string prop = entry.Key.ToString();
+                string value = entry.Value?.ToString() ?? "";
+                Console.WriteLine(prop + " = " + value);
+            }
         }
     }
 }

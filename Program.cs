@@ -34,6 +34,8 @@ namespace Tekla.ExcelMacros
             }
 
             Console.WriteLine($"Finished {args[0].ToLower()} macro");
+
+            Console.ReadKey();
         }
     }
 }
