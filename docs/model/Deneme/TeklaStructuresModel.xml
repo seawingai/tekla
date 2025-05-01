@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<TeklaStructuresModels>
+    <Model>
+        <Name>Deneme</Name>
+        <Designer></Designer>
+        <Description></Description>
+        <Version>2025.0</Version>
+        <ProductVersion>2025.0.46985.0</ProductVersion>
+        <Language>enu</Language>
+        <Guid>41ed2de3-7782-4515-b2f1-634ecb6be3de</Guid>
+        <TeklaStructuresDatabaseVersion>960</TeklaStructuresDatabaseVersion>
+        <IsTemplate>FALSE</IsTemplate>
+        <Template></Template>
+        <Environment>Default</Environment>
+        <EnvironmentVersion>2025.0.14</EnvironmentVersion>
+        <EnvironmentId>GlobalDefaultEnvironment</EnvironmentId>
+        <ConnectedId></ConnectedId>
+        <Tags></Tags>
+        <LastOpened></LastOpened>
+        <LastModified></LastModified>
+        <SystemLocale>en-US</SystemLocale>
+        <RegionalSettings>en-PK</RegionalSettings>
+        <Utf8BetaEnabled>false</Utf8BetaEnabled>
+        <TimeFormatLong>h:mm:ss tt</TimeFormatLong>
+        <TimeFormatShort>h:mm:ss tt</TimeFormatShort>
+        <DateFormatLong>dd/MM/yyyy</DateFormatLong>
+        <DateFormatShort>dd/MM/yyyy</DateFormatShort>
+        <FirstDayOfWeek>6</FirstDayOfWeek>
+        <ProjectNumber>1</ProjectNumber>
+        <ProjectName>Trimble</ProjectName>
+        <ProjectBuilder></ProjectBuilder>
+        <ProjectObject></ProjectObject>
+        <ProjectLocation></ProjectLocation>
+        <ProjectAddress></ProjectAddress>
+        <ProjectPostalBox></ProjectPostalBox>
+        <ProjectTown></ProjectTown>
+        <ProjectRegion></ProjectRegion>
+        <ProjectPostalCode></ProjectPostalCode>
+        <ProjectCountry></ProjectCountry>
+        <ProjectStartDate></ProjectStartDate>
+        <ProjectEndDate></ProjectEndDate>
+        <ProjectInfo1></ProjectInfo1>
+        <ProjectInfo2></ProjectInfo2>
+        <ProjectGuid></ProjectGuid>
+        <ProjectDescription></ProjectDescription>
+        <CloudFirmFolderId></CloudFirmFolderId>
+        <CloudFirmFolderVersion></CloudFirmFolderVersion>
+        <UseLastVersionOfCloudFirmFolder>false</UseLastVersionOfCloudFirmFolder>
+        <TPackPackages/>
+        <SharingInfo/>
+    </Model>
+</TeklaStructuresModels>
