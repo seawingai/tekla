@@ -11,7 +11,6 @@ namespace Tekla.ExcelMacros
     {
         private readonly string excelFilePath;
         private readonly string sheetName = "Connections";
-        private readonly string logFilePath;
         private Model model;
 
         public ImportFromExcel()
@@ -21,18 +20,31 @@ namespace Tekla.ExcelMacros
             // Assuming the file is located on the Desktop
             string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             this.excelFilePath = Path.Combine(desktopPath, "Model.xlsx");
-            this.logFilePath = Path.Combine(desktopPath, "ConnectionLog.txt");
         }
 
         public void Import()
         {
+            try
+            {
+                Execute();
+            }
+            catch (Exception ex)
+            {
+                Log($"Fatal Error occured.\n{ex.Message}\n{ex.StackTrace}");
+
+                Console.ReadKey();
+            }
+        }
+
+        private void Execute()
+        {
+            Log($"Import started");
+
             if (!model.GetConnectionStatus())
             {
                 Log("Cannot connect to Tekla Structures model.");
                 return;
             }
-
-            Log("=== Run started at " + DateTime.Now + " ===");
 
             if (!File.Exists(excelFilePath))
             {
@@ -40,123 +52,80 @@ namespace Tekla.ExcelMacros
                 return;
             }
 
-            try
+            var workbook = new XLWorkbook(excelFilePath);
+
+            if (!workbook.Worksheets.Contains(sheetName))
             {
-                var workbook = new XLWorkbook(excelFilePath);
-
-                if (!workbook.Worksheets.Contains(sheetName))
-                {
-                    Log($"Sheet '{sheetName}' not found in Excel file.");
-                    return;
-                }
-
-                var ws = workbook.Worksheet(sheetName);
-                var rows = ws.RangeUsed().RowsUsed().Skip(1)
-                    .Where(r => !string.IsNullOrWhiteSpace(r.Cell("J").GetString()))
-                    .ToList();
-
-                foreach (var row in rows)
-                {
-                    try
-                    {
-                        int primaryId = int.Parse(row.Cell("A").GetString());
-                        int secondaryId = int.Parse(row.Cell("E").GetString());
-                        int connectionType = int.Parse(row.Cell("J").GetString());
-
-                        var primary = model.SelectModelObject(new Identifier(primaryId)) as Part;
-                        var secondary = model.SelectModelObject(new Identifier(secondaryId)) as Part;
-
-                        if (primary == null || secondary == null)
-                        {
-                            Log($"Parts not found for IDs {primaryId}, {secondaryId}");
-                            continue;
-                        }
-
-                        if (ConnectionExists(primary, secondary, connectionType))
-                        {
-                            Log($"Connection already exists between {primaryId} and {secondaryId}");
-                            continue;
-                        }
-
-                        string connectionName = GetConnectionName(connectionType);
-
-                        var connection = new Connection
-                        {
-                            Name = connectionName,
-                            Number = connectionType
-                        };
-
-                        connection.SetPrimaryObject(primary);
-                        connection.SetSecondaryObject(secondary);
-
-                        if (!connection.Insert())
-                        {
-                            Log($"Failed to insert {connectionType} between {primaryId} and {secondaryId}");
-                        }
-                        else
-                        {
-                            Log($"Inserted {connectionType} between {primaryId} and {secondaryId}");
-                        }
-                    }
-                    catch (Exception exRow)
-                    {
-                        Log($"Row {row.RowNumber()} error: {exRow.Message}");
-                    }
-                }
-
-                model.CommitChanges();
-            }
-            catch (Exception ex)
-            {
-                Log("Fatal Error: " + ex.ToString());
+                Log($"Sheet '{sheetName}' not found in Excel file.");
+                return;
             }
 
-            Log("=== Run ended at " + DateTime.Now + " ===");
-        }
+            var ws = workbook.Worksheet(sheetName);
+            var rows = ws.RangeUsed().RowsUsed().Skip(1)
+                .Where(r => !string.IsNullOrWhiteSpace(r.Cell("J").GetString()))
+                .ToList();
 
-        private bool ConnectionExists(Part primary, Part secondary, int number)
-        {
-            var children = primary.GetChildren();
-            while (children.MoveNext())
+            foreach (var row in rows)
             {
-                if (children.Current is Connection connection && connection.Number == number)
+                try
                 {
-                    foreach (var obj in connection.GetSecondaryObjects())
+                    /*
+                        A = Preliminary ID  
+                        B = Pre. Name  
+                        C = Pre. Section  
+                        D = Pre. Comment  
+                        E = Secondary ID  
+                        F = Sec. Name  
+                        G = Sec. Section  
+                        H = Sec. Comment  
+                        I = Mid-Connection  
+                        J = Connection Type  
+                    */
+                    int primaryId = int.Parse(row.Cell("A").GetString());
+                    int secondaryId = int.Parse(row.Cell("E").GetString());
+                    int connectionType = int.Parse(row.Cell("J").GetString());
+
+                    var primary = model.SelectModelObject(new Identifier(primaryId)) as Part;
+                    var secondary = model.SelectModelObject(new Identifier(secondaryId)) as Part;
+
+                    if (primary == null || secondary == null)
                     {
-                        if (obj is Part secPart && secPart.Identifier.ID == secondary.Identifier.ID)
-                            return true;
+                        Log($"Parts not found for IDs {primaryId}, {secondaryId}");
+                        continue;
+                    }
+
+                    var connection = new Connection
+                    {
+                        Number = connectionType
+                    };
+
+                    connection.SetPrimaryObject(primary);
+                    connection.SetSecondaryObject(secondary);
+
+                    if (!connection.Insert())
+                    {
+                        Log($"Failed to insert {connectionType} between {primaryId} and {secondaryId}. May be connection already exists.");
+                    }
+                    else
+                    {
+                        Log($"Successfully inserted {connectionType} between {primaryId} and {secondaryId}");
                     }
                 }
+                catch (Exception exRow)
+                {
+                    Log($"Row {row.RowNumber()} error: {exRow.Message}");
+                }
             }
-            return false;
-        }
 
-        private string GetConnectionName(int connectionType)
-        {
-            return connectionType switch
-            {
-                77 => "ColumnSplice",           // or "BeamSplice", "BracingSplice"
-                40 => "MomentEndPlate",
-                14 => "PinEndPlateFlange",      // also used for some brace connections
-                119 => "PinEndPlateWeb",
-                0 => "PinWebPlate",
-                27 => "BeamToBeamPinEndPlate1",
-                65 => "BeamToBeamPinEndPlate2",
-                185 => "SingleOuterPlate",
-                146 => "ShearPlate",
-                11 => "SingleAngle",            // or could be 10
-                10 => "SingleAngle",            // in case 10 is used
-                20 => "EndPlate",
-                999 => "Unknown",
-                _ => "Unknown"
-            };
+            model.CommitChanges();
+
+            Log($"Import finished");
         }
 
         private void Log(string message)
         {
             string fullMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - {message}";
             Console.WriteLine(fullMessage);
-            File.AppendAllText(logFilePath, fullMessage + Environment.NewLine);
         }
     }
 }

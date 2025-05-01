@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.IO;
 using ClosedXML.Excel;
 using Tekla.Structures.Model;
@@ -16,7 +15,7 @@ namespace Tekla.ExcelMacros
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error occured.\n{ex.Message}\n{ex.StackTrace}");
+                Log($"Fatal Error occured.\n{ex.Message}\n{ex.StackTrace}");
 
                 Console.ReadKey();
             }
@@ -27,7 +26,7 @@ namespace Tekla.ExcelMacros
             var model = new Model();
             if (!model.GetConnectionStatus())
             {
-                Console.WriteLine("Tekla not connected.");
+                Log("Tekla not connected.");
                 return;
             }
 
@@ -61,29 +60,19 @@ namespace Tekla.ExcelMacros
                     worksheet.Cell(row, 9).Value = beam.EndPoint.Z;
                     worksheet.Cell(row, 10).Value = comment;
 
-                    Console.WriteLine($"[{row}] - Beam added: {beam.Identifier.ID} - [{beam.Name}] - comment:[{comment}]");
+                    Log($"[{row}] - Beam added: {beam.Identifier.ID} - [{beam.Name}] - comment:[{comment}]");
 
                     row++;
                 }
             }
 
             workbook.SaveAs(filePath);
-            Console.WriteLine($"Excel saved: {filePath}");
+            Log($"Excel saved: {filePath}");
         }
-
-        private void GetUserPropertyNames(Beam beam)
+        private void Log(string message)
         {
-            Console.WriteLine($"UDA for beam: {beam.Name}");
-
-            var enumProps = new Hashtable();
-            beam.GetAllUserProperties(ref enumProps);
-
-            foreach (DictionaryEntry entry in enumProps)
-            {
-                string prop = entry.Key.ToString();
-                string value = entry.Value?.ToString() ?? "";
-                Console.WriteLine(prop + " = " + value);
-            }
+            string fullMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - {message}";
+            Console.WriteLine(fullMessage);
         }
     }
 }
