@@ -4,15 +4,13 @@
 		<OutputType>Exe</OutputType>
 		<TargetFramework>net48</TargetFramework>
 		<StartupObject>Tekla.ExcelMacros.Program</StartupObject>
-		<BaseOutputPath>C:\data\code\tekla\docs\model\Deneme\macros\modeling\excel-macros</BaseOutputPath>
+		<BaseOutputPath>docs\model\Deneme\macros\modeling\excel-macros</BaseOutputPath>
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<Compile Remove="docs\modeling\ExportToExcel.cs" />
 		<Compile Remove="docs\modeling\ImportFromExcel.cs" />
-		<Compile Remove="docs\model\Deneme\macros\modeling\ExportToExcel.cs" />
-		<Compile Remove="docs\model\Deneme\macros\modeling\ImportFromExcel.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -31,6 +29,9 @@
 		<Reference Include="Tekla.Structures.Model">
 			<HintPath>C:\Program Files\Tekla Structures\2025.0\bin\Tekla.Structures.Model.dll</HintPath>
 		</Reference>
+		<Reference Include="Tekla.Structures.Model.UI">
+			<HintPath>C:\Program Files\Tekla Structures\2025.0\bin\Tekla.Structures.Model.UI.dll</HintPath>
+		</Reference>
 		<Reference Include="Tekla.Structures.Datatype">
 			<HintPath>C:\Program Files\Tekla Structures\2025.0\bin\Tekla.Structures.Datatype.dll</HintPath>
 		</Reference>
@@ -43,20 +44,22 @@
 		<None Include="docs\modeling\ImportFromExcel.cs">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</None>
-		<None Include="docs\model\Deneme\macros\modeling\ExportToExcel.cs" />
-		<None Include="docs\model\Deneme\macros\modeling\ImportFromExcel.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="docs\model\Deneme\macros\modeling\" />
 	</ItemGroup>
 
 	<Target Name="PostBuildCopy" AfterTargets="Build">
-		<Copy SourceFiles="docs\modeling\ExportToExcel.cs" DestinationFolder="C:\data\code\tekla\docs\model\Deneme\macros\modeling\" SkipUnchangedFiles="true" />
-		<Copy SourceFiles="docs\modeling\ImportFromExcel.cs" DestinationFolder="C:\data\code\tekla\docs\model\Deneme\macros\modeling\" SkipUnchangedFiles="true" />
+		<Copy SourceFiles="docs\modeling\ExportToExcel.cs" DestinationFolder="docs\model\Deneme\macros\modeling\" SkipUnchangedFiles="true" />
+		<Copy SourceFiles="docs\modeling\ImportFromExcel.cs" DestinationFolder="docs\model\Deneme\macros\modeling\" SkipUnchangedFiles="true" />
 	</Target>
 
 	<Target Name="CopyToSecondOutput" AfterTargets="Build">
 		<ItemGroup>
 			<BuiltFiles Include="$(BaseOutputPath)\**\*.*" />
 		</ItemGroup>
-		<Copy SourceFiles="@(BuiltFiles)" DestinationFolder="C:\data\code\tekla\docs\modeling\excel-macros\%(RecursiveDir)" SkipUnchangedFiles="true" />
+		<Copy SourceFiles="@(BuiltFiles)" DestinationFolder="docs\modeling\excel-macros\%(RecursiveDir)" SkipUnchangedFiles="true" />
 	</Target>
 
 </Project>

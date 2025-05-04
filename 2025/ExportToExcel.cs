@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using ClosedXML.Excel;
 using Tekla.Structures.Model;
@@ -39,12 +40,35 @@ namespace Tekla.ExcelMacros
                 worksheet.Cell(1, i + 1).Value = headers[i];
 
             int row = 2;
-            var selector = model.GetModelObjectSelector();
-            var objects = selector.GetAllObjects();
 
-            while (objects.MoveNext())
+            var selector = new Tekla.Structures.Model.UI.ModelObjectSelector();
+            var selectedObjects = selector.GetSelectedObjects();
+
+            var isSelected = false;
+            while (selectedObjects.MoveNext())
+                isSelected = true;
+
+            ModelObjectEnumerator objectsToExport;
+
+            if (isSelected)
             {
-                if (objects.Current is Beam beam)
+                Log("Exporting selected objects only.");
+
+                selectedObjects.Reset();
+                objectsToExport = selectedObjects;
+            }
+            else
+            {
+                Log("No objects selected. Exporting all model objects.");
+
+                objectsToExport = new Model().GetModelObjectSelector().GetAllObjects();
+            }
+
+            while (objectsToExport.MoveNext())
+            {
+                var part = objectsToExport.Current;
+
+                if (part is Beam beam)
                 {
                     string comment = "";
                     beam.GetUserProperty("comment", ref comment);
@@ -69,6 +93,7 @@ namespace Tekla.ExcelMacros
             workbook.SaveAs(filePath);
             Log($"Excel saved: {filePath}");
         }
+
         private void Log(string message)
         {
             string fullMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - {message}";
